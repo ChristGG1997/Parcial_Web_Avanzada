@@ -13,9 +13,9 @@ class Cliente(db.Model):
     def __init__(self, nombre):
        self.nombre = nombre
 
-with app.app_context():s
+with app.app_context():
     db.create_all()
 
 class ClienteSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'nombre', 'apellido', 'telefono', 'direccion')
+        fields = ('id', 'nombre', 'rol', 'salario', 'tarifa')

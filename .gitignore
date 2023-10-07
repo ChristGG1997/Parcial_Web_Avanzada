@@ -1,3 +1,6 @@
 
 venv_web_avanzada/*
 .idea/*
+config/__pycache__/*
+controllers/__pycache__/*
+models/__pycache__/*
