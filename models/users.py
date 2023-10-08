@@ -1,6 +1,6 @@
 from config.database import ma, db, app
 
-class Cliente(db.Model):
+class User(db.Model):
     __tablename__ = 'tblusers'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -9,13 +9,12 @@ class Cliente(db.Model):
     salario = db.Column(db.Numeric)
     tarifa = db.Column(db.Numeric)
     
-
     def __init__(self, nombre):
        self.nombre = nombre
 
 with app.app_context():
     db.create_all()
 
-class ClienteSchema(ma.Schema):
+class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'nombre', 'rol', 'salario', 'tarifa')
