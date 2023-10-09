@@ -1,11 +1,11 @@
-from config.database import ma, db, app
+from config.db import ma, db, app
 
 class Production(db.Model):
     __tablename__ = 'tblproduction'
 
     id = db.Column(db.Integer, primary_key = True)
     date = db.Column(db.DateTime)
-    price = db.Column(db.Decimal(precision=10, scale=2))
+    price = db.Column(db.Numeric(precision=10, scale=2))
     id_package = db.Column(db.Integer, db.ForeignKey('tblpackage.id'))
 
     def __init__(self, id):

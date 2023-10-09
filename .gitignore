@@ -1,6 +1,10 @@
 
 venv_web_avanzada/*
 .idea/*
+__pycache__/*
 config/__pycache__/*
-controllers/__pycache__/*
 models/__pycache__/*
+controllers/label/__pycache__/*
+controllers/packege/__pycache__/*
+controllers/production/__pycache__/*
+controllers/users/__pycache__/*

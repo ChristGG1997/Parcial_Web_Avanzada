@@ -1,4 +1,4 @@
-from config.database import ma, db, app
+from config.db import ma, db, app
 
 class Product(db.Model):
     __tablename__ = 'tblproduct'

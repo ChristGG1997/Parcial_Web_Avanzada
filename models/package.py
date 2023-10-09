@@ -1,4 +1,4 @@
-from config.database import ma, db, app
+from config.db import ma, db, app
 
 class Package(db.Model):
     __tablename__ = 'tblpackage'
@@ -6,7 +6,7 @@ class Package(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     date = db.Column(db.DateTime)
     quantity_products = db.Column(db.Numeric)
-    total_pay = db.Column(db.Decimal(precision=10, scale=2))
+    total_pay = db.Column(db.Numeric(precision=10, scale=2))
     id_user = db.Column(db.Integer, db.ForeignKey('tblusers.id'))
     state = db.Column(db.Boolean)
 
