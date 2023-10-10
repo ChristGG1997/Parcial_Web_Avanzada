@@ -5,6 +5,8 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(50))
+    email = db.Column(db.String(50))
+    password = db.Column(db.String(50))
     rol = db.Column(db.Integer, db.ForeignKey('tblroles.id'))
     salario = db.Column(db.Numeric)
     tarifa = db.Column(db.Numeric)
@@ -14,7 +16,8 @@ class User(db.Model):
 
 with app.app_context():
     db.create_all()
+    
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'nombre', 'rol', 'salario', 'tarifa')
+        fields = ('id', 'nombre', 'email', 'password', 'rol', 'salario', 'tarifa')
