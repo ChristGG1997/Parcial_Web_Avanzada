@@ -26,6 +26,11 @@ class Product(db.Model):
 
 with app.app_context():
     db.create_all()
+    suelas = Product(name='suelas', number=2002)
+    db.session.add(suelas)
+
+    db.session.commit()    
+
 
 class ProductsSchema(ma.Schema):
     class Meta:
