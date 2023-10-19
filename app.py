@@ -5,6 +5,9 @@ from controllers.packege.package__controller import ruta_package
 from controllers.label.label_controller import ruta_label
 from controllers.production.production_controller import ruta_production
 
+# ---------------------------------------------------------------------------- #
+#                                    ROUTES                                    #
+# ---------------------------------------------------------------------------- #
 app.register_blueprint(ruta_user, url_prefix = "/api_v1.0" )
 app.register_blueprint(ruta_package, url_prefix = "/api_v1.0" )
 app.register_blueprint(ruta_label, url_prefix = "/api_v1.0" )
