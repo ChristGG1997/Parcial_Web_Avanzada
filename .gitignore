@@ -1,10 +1,18 @@
 
-venv_web_avanzada/*
-.idea/*
-__pycache__/*
-config/__pycache__/*
-models/__pycache__/*
-controllers/label/__pycache__/*
-controllers/packege/__pycache__/*
-controllers/production/__pycache__/*
-controllers/users/__pycache__/*
+Api/venv_web_avanzada/*
+
+Api/.idea/*
+
+Api/__pycache__/*
+
+Api/config/__pycache__/*
+
+Api/models/__pycache__/*
+
+Api/controllers/label/__pycache__/*
+
+Api/controllers/packege/__pycache__/*
+
+Api/controllers/production/__pycache__/*
+
+Api/controllers/users/__pycache__/*
