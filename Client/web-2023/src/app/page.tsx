@@ -21,12 +21,6 @@ const Login = () => {
             </Link>
           </div>
         </form>
-        <div className="mt-6">
-          <a href="#" className="text-indigo-500 hover:text-indigo-600 font-medium">¿Olvidaste tu contraseña?</a>
-        </div>
-        <div className="mt-1">
-          <a href="#" className="text-indigo-500 hover:text-indigo-600 font-medium">¿No tienes una cuenta? Regístrate</a>
-        </div>
       </div>
     </div>
   )

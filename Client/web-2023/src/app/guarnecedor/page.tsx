@@ -3,7 +3,7 @@ import { SetStateAction, useState } from "react"
 
 interface Product {
     product: string
-    quantity: number
+    cantidad: number
     tickets: Ticket[]
 }
 
@@ -16,10 +16,10 @@ interface Ticket extends Product {
 
 export default function GuarnecedorSection() {
     const [product, setProduct] = useState("")
-    const [quantity, setQuantity] = useState<number>(0)
+    const [cantidad, setCantidad] = useState<number>(0)
     const [productsList, setProductsList] = useState<Product[]>([])
     const [productError, setProductError] = useState(false)
-    const [quantityError, setQuantityError] = useState(false)
+    const [cantidadError, setCantidadError] = useState(false)
     const [tickets, setTickets] = useState<Ticket[]>([])
 
     const handleProductChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -27,43 +27,107 @@ export default function GuarnecedorSection() {
         setProductError(false)
     }
 
-    const handleQuantityChange = (event: { target: { value: SetStateAction<string> } }) => {
-        setQuantity(Number(event.target.value))
-        setQuantityError(false)
+    const handleCantidadChange = (event: { target: { value: SetStateAction<string> } }) => {
+        setCantidad(Number(event.target.value))
+        setCantidadError(false)
     }
 
     const handleSave = () => {
         if (product === "") {
-            setProductError(true)
-            return
+            setProductError(true);
+            return;
         }
-        if (quantity === 0) {
-            setQuantityError(true)
-            return
+    
+        if (cantidad === 0) {
+            setCantidadError(true);
+            return;
         }
-        const existingProductIndex = productsList.findIndex(item => item.product.toLowerCase() === product.toLowerCase())
+    
+        let existingProductIndex = productsList.findIndex(item => item.product.toLowerCase() === product.toLowerCase());
+    
         if (existingProductIndex !== -1) {
-            const updatedProductsList = [...productsList]
-            updatedProductsList[existingProductIndex].quantity += quantity
-            setProductsList(updatedProductsList)
+            const updatedProductsList = [...productsList];
+            const existingProduct = updatedProductsList[existingProductIndex];
+    
+            let totalQuantity = existingProduct.cantidad + cantidad;
+    
+            while (totalQuantity >= 12) {
+                updatedProductsList.push({
+                    product: existingProduct.product,
+                    cantidad: 12,
+                    tickets: [],
+                });
+                totalQuantity -= 12;
+            }
+    
+            existingProduct.cantidad = totalQuantity;
+    
+            updatedProductsList[existingProductIndex] = existingProduct;
+            setProductsList(updatedProductsList);
         } else {
-            setProductsList([...productsList, { product, quantity, tickets: [] }])
+            let totalQuantity = cantidad;
+    
+            while (totalQuantity >= 12) {
+                productsList.push({
+                    product,
+                    cantidad: 12,
+                    tickets: [],
+                });
+                totalQuantity -= 12;
+            }
+    
+            if (totalQuantity > 0) {
+                productsList.push({
+                    product,
+                    cantidad: totalQuantity,
+                    tickets: [],
+                });
+            }
+    
+            setProductsList([...productsList]);
         }
-        setProduct("")
-        setQuantity(0)
-    }
+    
+        setProduct("");
+        setCantidad(0);
+    };
+    
+    const handleGenerateTickets = () => {
+        const updatedProductsList = [...productsList];
+    
+        for (let i = 0; i < updatedProductsList.length; i++) {
+            let totalQuantity = updatedProductsList[i].cantidad;
+            let fullTicketsCount = Math.floor(totalQuantity / 12);
+            let remainder = totalQuantity % 12;
+    
+            for (let j = 0; j < fullTicketsCount; j++) {
+                updatedProductsList[i].tickets.push({
+                    date: new Date(),
+                    product: updatedProductsList[i].product,
+                    cantidad: 12,
+                    tickets: [],
+                });
+            }
+    
+            updatedProductsList[i].cantidad = remainder;
+        }
+    
+        setProductsList(updatedProductsList);
+    };
+      
+      
+      
 
     const handleGenerateTicket = (index: number) => {
         const item = productsList[index]
         const ticket: Ticket = {
             date: new Date(),
             product: "",
-            quantity: 0,
+            cantidad: 0,
             tickets: []
         }
-        const updatedProductsList = [...productsList]
-        updatedProductsList[index].tickets.push(ticket)
-        setProductsList(updatedProductsList)
+        const upfechadProductsList = [...productsList]
+        upfechadProductsList[index].tickets.push(ticket)
+        setProductsList(upfechadProductsList)
         console.log("Generating ticket...")
     }
 
@@ -72,12 +136,12 @@ export default function GuarnecedorSection() {
         const ticket: Ticket = {
             date: new Date(),
             product: "",
-            quantity: 0,
+            cantidad: 0,
             tickets: []
         }
-        const updatedProductsList = [...productsList]
-        updatedProductsList[index].tickets.push(ticket)
-        setProductsList(updatedProductsList)
+        const upfechadProductsList = [...productsList]
+        upfechadProductsList[index].tickets.push(ticket)
+        setProductsList(upfechadProductsList)
         console.log("Generating package ticket...")
     }
 
@@ -91,9 +155,9 @@ export default function GuarnecedorSection() {
                     {productError && <p style={{ color: 'red' }}>Product is required</p>}
                 </div>
                 <div className='p-[10px]'>
-                    <label htmlFor="quantity">Quantity:</label>
-                    <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} style={{ border: '1px solid black', padding: '5px' }} />
-                    {quantityError && <p style={{ color: 'red' }}>Quantity is required</p>}
+                    <label htmlFor="cantidad">Cantidad:</label>
+                    <input type="number" id="cantidad" value={cantidad} onChange={handleCantidadChange} style={{ border: '1px solid black', padding: '5px' }} />
+                    {cantidadError && <p style={{ color: 'red' }}>Cantidad is required</p>}
                 </div>
                 <button onClick={handleSave}>Save</button>
 
@@ -104,10 +168,10 @@ export default function GuarnecedorSection() {
                         <div key={index}>
                             <div className="border border-black p-2.5 m-2.5 flex">
                                 <p>{item.product}</p>
-                                <p className="ml-2.5">{item.quantity}</p>
+                                <p className="ml-2.5">{item.cantidad}</p>
                             </div>
                             <div className="flex items-center m-2.5">
-                                {item.quantity >= 12 ? (
+                                {item.cantidad >= 12 ? (
                                     <button onClick={() => handleGeneratePackageTicket(index)}>Generar ticket para paquete</button>
                                 ) : (
                                     <button onClick={() => handleGenerateTicket(index)}>Generar ticket</button>
@@ -117,8 +181,8 @@ export default function GuarnecedorSection() {
                                 {item.tickets.map((ticket, ticketIndex) => (
                                     <div key={ticketIndex} className="border border-black p-2.5 m-2.5">
                                         <p>Product: {item.product}</p>
-                                        <p>Quantity: {item.quantity}</p>
-                                        <p>Date: {ticket.date.toLocaleString()}</p>
+                                        <p>Cantidad: {item.cantidad}</p>
+                                        <p>Fecha: {ticket.date.toLocaleString()}</p>
                                     </div>
                                 ))}
                             </div>
