@@ -1,232 +1,264 @@
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const API_URL = 'http://christgg1997.pythonanywhere.com/api_v1.0';
+
+
+
+export interface UserInterface {
+    [x: string]: any;
+    id: number;
+    email: string;
+    role: string;
+    salario: string;
+    tarifa: string;
+    creationDate: Date;
+  }
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    USER                                    */
 /* -------------------------------------------------------------------------- */
 
-export async function getUser() {
-  try {
-    const response = await axios.get(API_URL + '/user');
-    const userData = response.data;
-    return userData;
-  } catch (error) {
-    console.error(error);
+export const useGetUser = () => {
+    const [users, setUser] = useState<UserInterface>();
+  
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(API_URL + '/user');
+          const userData = response.data;
+          setUser(userData);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      fetchUser();
+    }, []);
+  
+    return { users };
   }
-}
 
-async function postUser(data: any) {
-    const url = `${API_URL}/user`;
-    try {
-        const response = await axios.post(url, data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+
+
+    async function postUser(data: any) {
+        const url = `${API_URL}/user`;
+        try {
+            const response = await axios.post(url, data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
 
-async function postLogin(data: any) {
-    try {
-        const response = await axios.post(API_URL + '/login', data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+    async function postLogin(data: any) {
+        try {
+            const response = await axios.post(API_URL + '/login', data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-export async function putUser(id: string, data: any) {
-    const url = `${API_URL}/user/${id}`;
-    try {
-        await axios.put(url, data);
-        console.log("response", "Success");
-    } catch (error) {
-        console.error(error);
+    export async function putUser(id: string, data: any) {
+        const url = `${API_URL}/user/${id}`;
+        try {
+            await axios.put(url, data);
+            console.log("response", "Success");
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
 
-/* -------------------------------------------------------------------------- */
-/*                                  PAQUETES                                  */
-/* -------------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------------- */
+    /*                                  PAQUETES                                  */
+    /* -------------------------------------------------------------------------- */
 
-async function getPackage() {
-    try {
-        const response = await axios.get(API_URL + '/package');
-        const paquetesData = response.data;
-        return paquetesData;
-    } catch (error) {
-        console.error(error);
+    async function getPackage() {
+        try {
+            const response = await axios.get(API_URL + '/package');
+            const paquetesData = response.data;
+            return paquetesData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function getPackageById(id: string) {
-    const url = `${API_URL}/package/${id}`;
-    try {
-        const response = await axios.get(url);
-        const packageData = response.data;
-        return packageData;
-    } catch (error) {
-        console.error(error);
+    async function getPackageById(id: string) {
+        const url = `${API_URL}/package/${id}`;
+        try {
+            const response = await axios.get(url);
+            const packageData = response.data;
+            return packageData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function updatePackage(id: string, data: any) {
-    const url = `${API_URL}/package/${id}`;
-    try {
-        const response = await axios.put(url, data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+    async function updatePackage(id: string, data: any) {
+        const url = `${API_URL}/package/${id}`;
+        try {
+            const response = await axios.put(url, data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-/* -------------------------------------------------------------------------- */
-/*                                 PRODUCTION                                 */
-/* -------------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------------- */
+    /*                                 PRODUCTION                                 */
+    /* -------------------------------------------------------------------------- */
 
-async function getProduction(id: string) {
-    try {
+    async function getProduction(id: string) {
+        try {
+            const url = `${API_URL}/production/${id}`;
+            const response = await axios.get(url);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    async function getProductionId(id: string) {
         const url = `${API_URL}/production/${id}`;
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
+        try {
+            const response = await axios.get(url);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-
-async function getProductionId(id: string) {
-    const url = `${API_URL}/production/${id}`;
-    try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
+    async function postProduction(data: any) {
+        const url = `${API_URL}/production`;
+        try {
+            const response = await axios.post(url, data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function postProduction(data: any) {
-    const url = `${API_URL}/production`;
-    try {
-        const response = await axios.post(url, data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+    async function putProduction(id: string, data: any) {
+        const url = `${API_URL}/production/${id}`;
+        try {
+            await axios.put(url, data);
+            console.log("response", "Success");
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function putProduction(id: string, data: any) {
-    const url = `${API_URL}/production/${id}`;
-    try {
-        await axios.put(url, data);
-        console.log("response", "Success");
-    } catch (error) {
-        console.error(error);
+    /* -------------------------------------------------------------------------- */
+    /*                                   PRODUCT                                  */
+    /* -------------------------------------------------------------------------- */
+
+    export const useGetProduct = () => {
+        const [getproduct, setProduct] = useState(null);
+      
+        useEffect(() => {
+          const fetchProduct = async () => {
+            try {
+              const response = await axios.get(API_URL + '/product');
+              const productData = response.data;
+              setProduct(productData);
+            } catch (error) {
+              console.error(error);
+            }
+          }
+          fetchProduct();
+        }, []);
+      
+        return { getproduct };
     }
-}
 
-/* -------------------------------------------------------------------------- */
-/*                                   PRODUCT                                  */
-/* -------------------------------------------------------------------------- */
-
-async function getProduct() {
-    const url = `${API_URL}/product`;
-    try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
+    async function postProduct(data: any) {
+        const url = `${API_URL}/product`;
+        try {
+            const response = await axios.post(url, data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function postProduct(data: any) {
-    const url = `${API_URL}/product`;
-    try {
-        const response = await axios.post(url, data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+    async function putProduct(id: string, data: any) {
+        const url = `${API_URL}/product/${id}`;
+        try {
+            await axios.put(url, data);
+            console.log("response", "Success");
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function putProduct(id: string, data: any) {
-    const url = `${API_URL}/product/${id}`;
-    try {
-        await axios.put(url, data);
-        console.log("response", "Success");
-    } catch (error) {
-        console.error(error);
+    async function getProductById(id: string) {
+        const url = `${API_URL}/product/${id}`;
+        try {
+            const response = await axios.get(url);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function getProductById(id: string) {
-    const url = `${API_URL}/product/${id}`;
-    try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
+    /* -------------------------------------------------------------------------- */
+    /*                                    LABES                                   */
+    /* -------------------------------------------------------------------------- */
+
+    async function getLabel() {
+        const url = `${API_URL}/label`;
+        try {
+            const response = await axios.get(url);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-/* -------------------------------------------------------------------------- */
-/*                                    LABES                                   */
-/* -------------------------------------------------------------------------- */
-
-async function getLabel() {
-    const url = `${API_URL}/label`;
-    try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
+    async function postLabel(data: any) {
+        const url = `${API_URL}/label`;
+        try {
+            const response = await axios.post(url, data);
+            const responseData = response.data;
+            return responseData;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function postLabel(data: any) {
-    const url = `${API_URL}/label`;
-    try {
-        const response = await axios.post(url, data);
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        console.error(error);
+    async function putLabel(id: string, data: any) {
+        const url = `${API_URL}/label/${id}`;
+        try {
+            await axios.put(url, data);
+            console.log("response", "Success");
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
 
-async function putLabel(id: string, data: any) {
-    const url = `${API_URL}/label/${id}`;
-    try {
-        await axios.put(url, data);
-        console.log("response", "Success");
-    } catch (error) {
-        console.error(error);
+    async function getLabelById(id: string) {
+        const url = `${API_URL}/label/${id}`;
+        try {
+            const response = await axios.get(url);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
     }
-}
-
-async function getLabelById(id: string) {
-    const url = `${API_URL}/label/${id}`;
-    try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 
 

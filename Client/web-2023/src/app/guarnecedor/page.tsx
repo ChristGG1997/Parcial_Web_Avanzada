@@ -1,5 +1,6 @@
 "use client"
-import { SetStateAction, useState } from "react"
+import { useGetProduct, useGetUser } from "@/services/app.services"
+import { SetStateAction, useEffect, useState } from "react"
 
 interface Product {
     product: string
@@ -150,6 +151,12 @@ export default function GuarnecedorSection() {
     }
 
     const products = ["Suela", "Cordon", "Media", "Agujeta"];
+
+    const { users } = useGetUser()
+    console.log(users)
+
+    const { getproduct } = useGetProduct()
+    console.log(getproduct)
 
     return (
         <>
