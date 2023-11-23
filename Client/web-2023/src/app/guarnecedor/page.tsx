@@ -21,6 +21,8 @@ export default function GuarnecedorSection() {
     const [productError, setProductError] = useState(false)
     const [cantidadError, setCantidadError] = useState(false)
     const [tickets, setTickets] = useState<Ticket[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalProduct, setModalProduct] = useState<Product | Ticket | null>(null)
 
     const handleProductChange = (event: { target: { value: SetStateAction<string> } }) => {
         setProduct(event.target.value)
@@ -37,20 +39,20 @@ export default function GuarnecedorSection() {
             setProductError(true);
             return;
         }
-    
+
         if (cantidad === 0) {
             setCantidadError(true);
             return;
         }
-    
+
         let existingProductIndex = productsList.findIndex(item => item.product.toLowerCase() === product.toLowerCase());
-    
+
         if (existingProductIndex !== -1) {
             const updatedProductsList = [...productsList];
             const existingProduct = updatedProductsList[existingProductIndex];
-    
+
             let totalQuantity = existingProduct.cantidad + cantidad;
-    
+
             while (totalQuantity >= 12) {
                 updatedProductsList.push({
                     product: existingProduct.product,
@@ -59,14 +61,14 @@ export default function GuarnecedorSection() {
                 });
                 totalQuantity -= 12;
             }
-    
+
             existingProduct.cantidad = totalQuantity;
-    
+
             updatedProductsList[existingProductIndex] = existingProduct;
             setProductsList(updatedProductsList);
         } else {
             let totalQuantity = cantidad;
-    
+
             while (totalQuantity >= 12) {
                 productsList.push({
                     product,
@@ -75,7 +77,7 @@ export default function GuarnecedorSection() {
                 });
                 totalQuantity -= 12;
             }
-    
+
             if (totalQuantity > 0) {
                 productsList.push({
                     product,
@@ -83,22 +85,22 @@ export default function GuarnecedorSection() {
                     tickets: [],
                 });
             }
-    
+
             setProductsList([...productsList]);
         }
-    
+
         setProduct("");
         setCantidad(0);
     };
-    
+
     const handleGenerateTickets = () => {
         const updatedProductsList = [...productsList];
-    
+
         for (let i = 0; i < updatedProductsList.length; i++) {
             let totalQuantity = updatedProductsList[i].cantidad;
             let fullTicketsCount = Math.floor(totalQuantity / 12);
             let remainder = totalQuantity % 12;
-    
+
             for (let j = 0; j < fullTicketsCount; j++) {
                 updatedProductsList[i].tickets.push({
                     date: new Date(),
@@ -107,15 +109,15 @@ export default function GuarnecedorSection() {
                     tickets: [],
                 });
             }
-    
+
             updatedProductsList[i].cantidad = remainder;
         }
-    
+
         setProductsList(updatedProductsList);
     };
-      
-      
-      
+
+
+
 
     const handleGenerateTicket = (index: number) => {
         const item = productsList[index]
@@ -135,24 +137,32 @@ export default function GuarnecedorSection() {
         const item = productsList[index]
         const ticket: Ticket = {
             date: new Date(),
-            product: "",
-            cantidad: 0,
-            tickets: []
+            product: item.product,
+            cantidad: item.cantidad,
+            tickets: item.tickets
         }
-        const upfechadProductsList = [...productsList]
-        upfechadProductsList[index].tickets.push(ticket)
-        setProductsList(upfechadProductsList)
+        setModalProduct(ticket);
+        setIsModalOpen(true);
+        const updatedProductsList = [...productsList]
+        updatedProductsList[index].tickets.push(ticket)
+        setProductsList(updatedProductsList)
         console.log("Generating package ticket...")
     }
 
+    const products = ["Suela", "Cordon", "Media", "Agujeta"];
 
     return (
         <>
             <div className="flex justify-center items-center flex-col mt-40">
                 <div className='p-[10px]'>
-                    <label htmlFor="product">Product:</label>
-                    <input type="text" id="product" value={product} onChange={handleProductChange} style={{ border: '1px solid black', padding: '5px' }} />
-                    {productError && <p style={{ color: 'red' }}>Product is required</p>}
+                    <label htmlFor="product">Producto:</label>
+                    <select id="product" value={product} onChange={handleProductChange} style={{ border: '1px solid black', padding: '5px' }}>
+                        <option value="">Selecciona un producto</option>
+                        {products.map((product, index) => (
+                            <option key={index} value={product}>{product}</option>
+                        ))}
+                    </select>
+                    {productError && <p style={{ color: 'red' }}>Producto es requerido</p>}
                 </div>
                 <div className='p-[10px]'>
                     <label htmlFor="cantidad">Cantidad:</label>
@@ -190,6 +200,17 @@ export default function GuarnecedorSection() {
                     ))}
                 </div>
             </div>
+            {isModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <h2>TICKET CREADO</h2>
+                        <p>Producto: {modalProduct?.product}</p>
+                        <p>Cantidad: {modalProduct?.cantidad}</p>
+                        {modalProduct && 'date' in modalProduct && <p>Fecha: {modalProduct.date.toLocaleString()}</p>}
+                        <button onClick={() => setIsModalOpen(false)} style={{ marginTop: '20px' }}>Aceptar</button>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
