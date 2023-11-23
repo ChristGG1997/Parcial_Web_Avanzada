@@ -1,5 +1,5 @@
 "use client"
-import { useGetProduct, useGetUser } from "@/services/app.services"
+import { useGetProduct, useGetUser,  } from "@/services/app.services"
 import { SetStateAction, useEffect, useState } from "react"
 
 interface Product {
@@ -24,6 +24,8 @@ export default function GuarnecedorSection() {
     const [tickets, setTickets] = useState<Ticket[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalProduct, setModalProduct] = useState<Product | Ticket | null>(null)
+    const [productData, setProductData] = useState<string[]>([]);
+    // const { products } = useGetProduct();
 
     const handleProductChange = (event: { target: { value: SetStateAction<string> } }) => {
         setProduct(event.target.value)
@@ -117,7 +119,11 @@ export default function GuarnecedorSection() {
         setProductsList(updatedProductsList);
     };
 
+    const { users } = useGetUser()
 
+    const { products } = useGetProduct()
+    console.log(products);
+    
 
 
     const handleGenerateTicket = (index: number) => {
@@ -145,18 +151,14 @@ export default function GuarnecedorSection() {
         setModalProduct(ticket);
         setIsModalOpen(true);
         const updatedProductsList = [...productsList]
-        updatedProductsList[index].tickets.push(ticket)
+        updatedProductsList.splice(index, 1) // Elimina el producto de la lista
         setProductsList(updatedProductsList)
         console.log("Generating package ticket...")
     }
 
-    const products = ["Suela", "Cordon", "Media", "Agujeta"];
+    // const products = ["Suela", "Cordon", "Media", "Agujeta"];
 
-    const { users } = useGetUser()
-    console.log(users)
 
-    const { getproduct } = useGetProduct()
-    console.log(getproduct)
 
     return (
         <>
@@ -165,8 +167,8 @@ export default function GuarnecedorSection() {
                     <label htmlFor="product">Producto:</label>
                     <select id="product" value={product} onChange={handleProductChange} style={{ border: '1px solid black', padding: '5px' }}>
                         <option value="">Selecciona un producto</option>
-                        {products.map((product, index) => (
-                            <option key={index} value={product}>{product}</option>
+                        {products?.map((product, index) => (
+                            <option key={index} value={product.name}>{product.name.toUpperCase()}</option>
                         ))}
                     </select>
                     {productError && <p style={{ color: 'red' }}>Producto es requerido</p>}

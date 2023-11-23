@@ -220,6 +220,27 @@ def update_product(id):
 
     return production_schema.jsonify({'message': 'Product updated'}), 200
 
+@ruta_production.route('/product/<int:id>', methods=['DELETE'])
+def delete_product(id):
+    """
+    Elimina un registro de producto existente por su ID.
+
+    Argumentos:
+        id (int): El ID del registro de producto a eliminar.
+
+    Devoluciones:
+        Una respuesta JSON que indica si el producto fue eliminado correctamente.
+    """
+    product = Product.query.get(id)
+
+    if not product:
+        return jsonify({'message': 'Product not found'}), 404
+
+    db.session.delete(product)
+    db.session.commit()
+
+    return jsonify({'message': 'Product deleted'}), 200
+
 
 
 def token_required():

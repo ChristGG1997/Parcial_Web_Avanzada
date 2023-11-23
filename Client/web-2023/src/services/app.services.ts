@@ -15,6 +15,10 @@ export interface UserInterface {
     creationDate: Date;
   }
 
+  interface ProductInterface {
+    id: number;
+    name: string;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                    USER                                    */
@@ -163,22 +167,22 @@ export const useGetUser = () => {
     /* -------------------------------------------------------------------------- */
 
     export const useGetProduct = () => {
-        const [getproduct, setProduct] = useState(null);
-      
+        const [products, setProducts] = useState<ProductInterface[] | null>(null);
+    
         useEffect(() => {
-          const fetchProduct = async () => {
-            try {
-              const response = await axios.get(API_URL + '/product');
-              const productData = response.data;
-              setProduct(productData);
-            } catch (error) {
-              console.error(error);
+            const fetchProduct = async () => {
+                try {
+                    const response = await axios.get(API_URL + '/product');
+                    const productData: ProductInterface[] = response.data;
+                    setProducts(productData);
+                } catch (error) {
+                    console.error(error);
+                }
             }
-          }
-          fetchProduct();
+            fetchProduct();
         }, []);
-      
-        return { getproduct };
+    
+        return { products };
     }
 
     async function postProduct(data: any) {

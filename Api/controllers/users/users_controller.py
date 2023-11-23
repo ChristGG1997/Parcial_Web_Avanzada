@@ -23,7 +23,18 @@ def get_user():
         Un objeto JSON que contiene todos los usuarios de la base de datos.
     """
     resultall = User.query.all()
-    resultUser = users_schemas.dump(resultall)
+    resultUser = []
+    for user in resultall:
+        role = Role.query.get(user.role_id)
+        user_data = {
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+            'role': role.name,
+            'salario': user.salario,
+            'tarifa': user.tarifa,
+        }
+        resultUser.append(user_data)
     return jsonify(resultUser)
 
 @ruta_user.route('/user/<int:user_id>', methods=['GET'])
@@ -31,16 +42,25 @@ def get_user_by_id(user_id):
     """
     Recuperar un usuario por su ID.
 
-    Argumentos:
+    Argumentos: 
         user_id (int): el ID del usuario a recuperar.
 
     Devoluciones:
         Una respuesta JSON que contiene la información del usuario si se encuentra, o un error 404 si no se encuentra.
     """
     user = User.query.get(user_id)
+    role = Role.query.get(user.role_id)
+    user_data = {
+        'id': user.id,
+        'name': user.name,
+        'email': user.email,
+        'role': role.name
+        'salario': user.salario,
+        'tarifa': user.tarifa,
+    }
     if not user:
         return jsonify({'message': 'User not found'}), 404
-    return users_schema.jsonify(user)
+    return users_schema.jsonify(user_data)
 
 @ruta_user.route('/user', methods=['POST'])
 def add_user():
