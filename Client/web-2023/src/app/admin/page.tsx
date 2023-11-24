@@ -22,6 +22,8 @@ const Trabajadores = [
     }
 ]
 
+
+
 const Page = () => {
     const [searchTerm, setSearchTerm] = useState("")
 
@@ -62,10 +64,12 @@ const Page = () => {
                                     className="w-12 h-12 rounded-full bg-gray-300 mb-5">
 
                                 </Image>
-                                <div className="flex flex-col items-baseline">
-                                    <p className="font-bold text-xl mb-0">{trabajador.nombre}</p>
-                                    <p className="text-lg mb-2.5">{trabajador.rol}</p>
-                                </div>
+                                <Link href="/empleados">
+                                    <div className="flex flex-col items-baseline">
+                                        <p className="font-bold text-xl mb-0">{trabajador.nombre}</p>
+                                        <p className="text-lg mb-2.5">{trabajador.rol}</p>
+                                    </div>
+                                </Link>
                             </div>
                         ))}
                     </div>
