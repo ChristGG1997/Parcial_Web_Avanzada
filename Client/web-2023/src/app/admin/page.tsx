@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Avatars from '@/assets/Avatars.png'
 import Image from 'next/image'
+import { useUser } from "@/data/context/userContext";
 
 const Trabajadores = [
     {
@@ -26,6 +27,7 @@ const Trabajadores = [
 
 const Page = () => {
     const [searchTerm, setSearchTerm] = useState("")
+    const [user, setUser] = useState<{ role: string } | null>(null);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value)
@@ -37,6 +39,26 @@ const Page = () => {
         const searchTermLowerCase = searchTerm.toLowerCase()
         return nombre.includes(searchTermLowerCase) || rol.includes(searchTermLowerCase)
     })
+
+  const { updateUser } = useUser();
+
+//   useEffect(() => {
+//     if (users) {
+//       const foundUser = users.find(
+//         (u: { email: string }) => u.email === username
+//       );
+//       setUser(foundUser);
+//       updateUser({
+//         id: foundUser?.id,
+//         name: foundUser?.name,
+//         role: foundUser?.role,
+//         email: foundUser?.email,
+//       });
+//     }
+//   }, [users, username]);
+
+  console.log(user)
+
 
     return (
         <div>

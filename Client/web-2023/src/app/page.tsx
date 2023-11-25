@@ -20,10 +20,10 @@ const Login = () => {
       );
       setUser(foundUser);
       updateUser({
-        id: foundUser.id,
-        name: foundUser.name,
-        role: foundUser.role,
-        email: foundUser.email,
+        id: foundUser?.id,
+        name: foundUser?.name,
+        role: foundUser?.role,
+        email: foundUser?.email,
       });
     }
   }, [users, username]);
